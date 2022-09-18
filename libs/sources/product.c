@@ -5,15 +5,15 @@
 
 #define TTC 15
 
+unsigned int currentprodCode;
 // private functions declarations
 
 // returns priceTTC
 double getPriceTTC(double);
-
 Product newProduct(char *_name, double _price, unsigned int _inital_quantity)
 {
     int _priceTTC = getPriceTTC(_price);
-    Product p = {code : 1, name : NULL, price : _price, priceTTC : _priceTTC, quantity : _inital_quantity};
+    Product p = {code : currentprodCode++, name : NULL, price : _price, priceTTC : _priceTTC, quantity : _inital_quantity};
     p.name = calloc(strlen(_name) + 1, sizeof(char)); // alocate memory for the name
     strcpy(p.name, _name);                            // copy it
     return p;
@@ -33,12 +33,21 @@ void printProduct(Product p)
 void printProductTable(Product p)
 {
     printf(
-        "|| %d "
-        "|| %s "
-        "|| %.2lf "
-        "|| %.2lf "
-        "|| %d ||",
+        "||  %d  "
+        "| %s\t"
+        "| %.2lf\t"
+        "| %.2lf\t"
+        "| %d\t||\n",
         p.code, p.name, p.price, p.priceTTC, p.quantity);
+}
+
+void printShortenProductTable(Product p)
+{
+    printf(
+        "| %s\t"
+        "| %.2lf\t"
+        "| %.2lf\t||\n",
+        p.name, p.price, p.priceTTC);
 }
 
 void copyProduct(Product *_dest, Product _src)
@@ -47,13 +56,23 @@ void copyProduct(Product *_dest, Product _src)
     _dest->price = _src.price;
     _dest->priceTTC = _src.priceTTC;
     _dest->quantity = _src.quantity;
-    int _src_name_len = strlen(_src.name);
-    (_dest->name != NULL) ? realloc(_dest->name, _src_name_len) : calloc(_src_name_len + 1, sizeof(char));
+    int _src_name_sz = strlen(_src.name)+1;
+    // allocate or reallocate  name attr if NULL
+    _dest->name = (_dest->name != NULL) ? realloc(_dest->name, _src_name_sz*sizeof(char)) : calloc(_src_name_sz, sizeof(char));
+    strcpy(_dest->name,_src.name); //copy the name
+}
+
+void swapProducts(Product *p1,Product *p2){
+    Product temp={name:NULL};
+    copyProduct(&temp,*p1);
+    copyProduct(p1,*p2);
+    copyProduct(p2,temp);
+
 }
 
 bool hasLowQuantity(Product p)
 {
-    return p.quantity > 3;
+    return p.quantity < 3;
 }
 
 bool compareProducts(Product p1, Product p2)

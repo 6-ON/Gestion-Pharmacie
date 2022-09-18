@@ -7,9 +7,11 @@
 #define W_LOW_QTTY 300 
 #define ERR_NO_ENOU_QTTY 401 
 
+extern unsigned int currentprodCode;
+
 typedef struct 
 {
-   int code;
+   unsigned int code;
    char *name;
    double price;
    double priceTTC;
@@ -22,13 +24,19 @@ Product newProduct(char*,double,unsigned int);
 // print the product
 void printProduct(Product);
 
-//print pro
+// print product in Table format
 void printProductTable(Product);
+
+// print product with less info
+void printShortenProductTable(Product );
 
 // copy a product in another one
 void copyProduct(Product*,Product);
 
-// compare two products code PS:(compare only id)
+// swap accounts
+void swapProducts(Product*,Product*);
+
+// compare two products code PS:(compare only code)
 bool compareProducts(Product,Product);
 
 // update price 
