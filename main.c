@@ -19,10 +19,10 @@ int main(int argc, char const *argv[])
     addProduct(&pl,p3);
     addProduct(&pl,p4);
     // removeProductByCode(&pl,PROD_CODE_START+2);
-    // printProductList(pl);
-    sortProductListByName(&pl,true);
+    printProductList(pl);
+    // sortProductListByName(&pl,true);
     // printShortenProductList(pl);
-    printLowQuantityProducts(pl);
+    // printLowQuantityProducts(pl);
 
     // while (true)
     // {

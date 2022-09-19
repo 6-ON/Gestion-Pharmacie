@@ -23,7 +23,7 @@
 
 void setupPairs()
 {
-    start_color(); 
+    start_color();
 
     init_pair(SELECTED_PAIR, COLOR_BLACK, COLOR_WHITE); // init selected pair
 
@@ -35,7 +35,9 @@ void setupPairs()
 
     init_pair(SUCCESS_PAIR, COLOR_WHITE, COLOR_GREEN); // init SUCESS pair
 }
-
+// void drawSelectedLine(WINDOW *win, )
+// {
+// }
 int main()
 {
     initscr();   // initiate screen
@@ -64,9 +66,33 @@ int main()
     wattroff(menuWin, COLOR_PAIR(INFO_PAIR));                              // set the pair off
 
     mvwprintw(menuWin, 4, 5, CHOICE_1);
-    while(wgetch(menuWin)!=KEY_UP){
-        waddch(menuWin,'a');
-    }
+    // cbreak();
+    keypad(menuWin, TRUE); // to make window read special keys
+    // while(c!=KEY_UP){
+    //     c=wgetch(menuWin);
+    // }
+    mvwhline(menuWin,10,1,ACS_BOARD,winW-2);
 
-    endwin();
+    int c;
+    while (TRUE)
+    {
+        c = wgetch(menuWin);
+        switch (c)
+        {
+        case KEY_UP:
+            waddstr(menuWin, "key up pressed!\n");
+            break;
+        case KEY_DOWN:
+            waddstr(menuWin, "key down pressed!\n");
+            break;
+        case '\n':
+            endwin();
+            return 0;
+            break;
+
+        default:
+            waddstr(menuWin, "wrong key!\n");
+            break;
+        }
+    }
 }
