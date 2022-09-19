@@ -1,98 +1,136 @@
+#define APP_NAME " GESTIONAIRE DE PHARMACIE "
+
+#include <stdlib.h>
 #include <ncurses.h>
 #include <curses.h>
+#include <menu.h>
 #include <string.h>
 
-#define SELECTED_PAIR 1
-#define ERROR_PAIR 2
-#define WARNING_PAIR 3
-#define INFO_PAIR 4
-#define SUCCESS_PAIR 5
+#include "styling_lib.h"
 
-#define APP_NAME " GESTIONAIRE DE PHARMACIE "
+
 
 #define CREAOTR " Created By Amine GITHUB:6-ON "
 
 // menu options
-#define CHOICE_1 "Ajouter nouveau produits"
-#define CHOICE_2 "Lister tous les produit" // Par prix et Nom
-#define CHOICE_3 "Acheter produit"
-#define CHOICE_4 "Rechercher les produits"  // par code et quantite
-#define CHOICE_5 "Afficher l'etat du stock" // low quantity
-#define CHOICE_6 "Supprimer Produit"
-#define CHOICE_7 "Statistique de vente" // min max avg total
+#define AJOUTER "Ajouter nouveau produits"
+#define LISTER_PRD "Lister tous les produit" // Par prix et Nom
+#define ACHETER "Acheter produit"
+#define SEARCH "Rechercher les produits"  // par code et quantite
+#define ESTOCK "Afficher l'etat du stock" // low quantity
+#define SUPP_PROD "Supprimer Produit"
+#define ST_VNT "Statistique de vente" // min max avg total
+#define QUITTER "Quitter"              // min max avg total
 
-void setupPairs()
-{
-    start_color();
+#define N_CHOICES 8
+#define CH_AJOUTER 0
+#define CH_LISTER_PRD 1
+#define CH_ACHETER 2
+#define CH_SEARCH 3
+#define CH_ESTOCK 4
+#define CH_SUPP_PROD 5
+#define CH_ST_VNT 6
+#define CH_QUITTER 7
 
-    init_pair(SELECTED_PAIR, COLOR_BLACK, COLOR_WHITE); // init selected pair
+int calcCenterH(WINDOW *_w, char *_str) { return getmaxx(_w) / 2 - strlen(_str) / 2; }
 
-    init_pair(ERROR_PAIR, COLOR_WHITE, COLOR_RED); // init error pair
-
-    init_pair(WARNING_PAIR, COLOR_WHITE, COLOR_YELLOW); // init warning pair
-
-    init_pair(INFO_PAIR, COLOR_WHITE, COLOR_BLUE); // init info pair
-
-    init_pair(SUCCESS_PAIR, COLOR_WHITE, COLOR_GREEN); // init SUCESS pair
-}
-// void drawSelectedLine(WINDOW *win, )
-// {
-// }
 int main()
 {
-    initscr();   // initiate screen
-    noecho();    // prevent printing user input
-    curs_set(0); // remove the insertion cursor
-    setupPairs();
-    int xMax, yMax;
-    getmaxyx(stdscr, yMax, xMax); // get terminal dimens
+    init_curses();
+    int termH, termW;
+    getmaxyx(stdscr, termW, termH); // get terminal dimens
 
-    int winH = yMax - 2; // set the height
-    int winW = winH * 2; // set the width
+    int winH = termW - 2;          // set the height
+    int winW = ASPECT_RATIO(winH); // set the width
 
-    int winY = yMax / 2 - winH / 2; // set Y
-    int winX = xMax / 2 - winW / 2; // set X
+    // int winY = termW / 2 - winH / 2; // set Y
+    // int winX = termH / 2 - winW / 2; // set X
+    int winY = CENTER_VH(termW, winH); // set Y
+    int winX = CENTER_VH(termH, winW); // set X
 
     WINDOW *menuWin = newwin(winH, winW, winY, winX); // create menu window
+    box(menuWin, 0, 0);                               // add border
 
-    box(menuWin, 0, 0); // add border
+    wprintStyled(menuWin, APP_NAME, 0, calcCenterH(menuWin, APP_NAME), SELECTED_PAIR);
 
-    wattron(menuWin, COLOR_PAIR(SELECTED_PAIR));                      // set the pair on
-    mvwprintw(menuWin, 0, winW / 2 - strlen(APP_NAME) / 2, APP_NAME); // Print app name in the top center
-    wattroff(menuWin, COLOR_PAIR(SELECTED_PAIR));                     // set the pair off
+    wprintStyled(menuWin, CREAOTR, winH - 1, calcCenterH(menuWin, CREAOTR), INFO_PAIR);
 
-    wattron(menuWin, COLOR_PAIR(INFO_PAIR));                               // set the pair on
-    mvwprintw(menuWin, winH - 1, winW / 2 - strlen(CREAOTR) / 2, CREAOTR); // Print app name in the buttom center
-    wattroff(menuWin, COLOR_PAIR(INFO_PAIR));                              // set the pair off
-
-    mvwprintw(menuWin, 4, 5, CHOICE_1);
-    // cbreak();
     keypad(menuWin, TRUE); // to make window read special keys
-    // while(c!=KEY_UP){
-    //     c=wgetch(menuWin);
-    // }
-    mvwhline(menuWin,10,1,ACS_BOARD,winW-2);
+
+    ITEM **menuItems;
+    MENU *mainMenu;
+
+    menuItems = calloc(N_CHOICES + 1, sizeof(ITEM *)); // still not understood why the additional item
+    char *choices[] = {AJOUTER, LISTER_PRD,
+                       ACHETER, SEARCH,
+                       ESTOCK, SUPP_PROD,
+                       ST_VNT, QUITTER};
+    for (int i = 0; i < N_CHOICES; i++)
+        menuItems[i] = new_item(choices[i], "");
+
+    menuItems[N_CHOICES] = (ITEM *)NULL; // now i undestand why we allocate additional item
+    mainMenu = new_menu(menuItems);
+
+    wmove(menuWin, 5, 5);
+    set_menu_win(mainMenu, menuWin);
+    set_menu_sub(mainMenu, derwin(menuWin, N_CHOICES * 2, mainMenu->width, 5, 5));
+    set_menu_spacing(mainMenu, 0, 2, 1);
+    set_menu_mark(mainMenu, ">");
+    post_menu(mainMenu);
 
     int c;
-    while (TRUE)
+    while ((c = wgetch(menuWin)) != '\n')
     {
-        c = wgetch(menuWin);
         switch (c)
         {
         case KEY_UP:
-            waddstr(menuWin, "key up pressed!\n");
+            menu_driver(mainMenu, REQ_UP_ITEM);
             break;
         case KEY_DOWN:
-            waddstr(menuWin, "key down pressed!\n");
-            break;
-        case '\n':
-            endwin();
-            return 0;
-            break;
-
-        default:
-            waddstr(menuWin, "wrong key!\n");
+            menu_driver(mainMenu, REQ_DOWN_ITEM);
             break;
         }
     }
+    int selectedIndex = mainMenu->curitem->index;
+    unpost_menu(mainMenu);
+    free_menu(mainMenu);                // deallocate menu memory
+    for (int i = 0; i < N_CHOICES; ++i) // decallocate  items memory
+        free_item(menuItems[i]);
+    endwin();
+
+    switch (selectedIndex)
+    {
+    case CH_AJOUTER:
+        puts("you selected " AJOUTER);
+        break;
+    case CH_LISTER_PRD:
+        puts("you selected " LISTER_PRD);
+        break;
+    case CH_ACHETER:
+        puts("you selected " ACHETER);
+        break;
+    case CH_SEARCH:
+        puts("you selected " SEARCH);
+        break;
+    case CH_ESTOCK:
+        puts("you selected " ESTOCK);
+        break;
+    case CH_SUPP_PROD:
+        puts("you selected " SUPP_PROD);
+        break;
+    case CH_ST_VNT:
+        puts("you selected " ST_VNT);
+        break;
+    case CH_QUITTER:
+        puts("you selected " QUITTER);
+        break;
+
+    }
+
+
+
+
+
+
+    return 0;
 }
