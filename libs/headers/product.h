@@ -21,6 +21,9 @@ typedef struct
 // initialize new product
 Product newProduct(char*,double,unsigned int);
 
+// initialize new product
+Product initProduct(unsigned int ,char*,double,unsigned int);
+
 // print the product
 void printProduct(Product);
 

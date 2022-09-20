@@ -18,6 +18,14 @@ Product newProduct(char *_name, double _price, unsigned int _inital_quantity)
     strcpy(p.name, _name);                            // copy it
     return p;
 }
+Product initProduct(unsigned int _code ,char *_name, double _price, unsigned int _inital_quantity)
+{
+    int _priceTTC = getPriceTTC(_price);
+    Product p = {code : _code, name : NULL, price : _price, priceTTC : _priceTTC, quantity : _inital_quantity};
+    p.name = calloc(strlen(_name) + 1, sizeof(char)); // alocate memory for the name
+    strcpy(p.name, _name);                            // copy it
+    return p;
+}
 
 void printProduct(Product p)
 {
