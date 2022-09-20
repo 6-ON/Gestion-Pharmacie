@@ -8,8 +8,6 @@
 
 #include "styling_lib.h"
 
-
-
 #define CREAOTR " Created By Amine GITHUB:6-ON "
 
 // menu options
@@ -42,9 +40,6 @@ int main()
 
     int winH = termW - 2;          // set the height
     int winW = ASPECT_RATIO(winH); // set the width
-
-    // int winY = termW / 2 - winH / 2; // set Y
-    // int winX = termH / 2 - winW / 2; // set X
     int winY = CENTER_VH(termW, winH); // set Y
     int winX = CENTER_VH(termH, winW); // set X
 
@@ -59,7 +54,6 @@ int main()
 
     ITEM **menuItems;
     MENU *mainMenu;
-
     menuItems = calloc(N_CHOICES + 1, sizeof(ITEM *)); // still not understood why the additional item
     char *choices[] = {AJOUTER, LISTER_PRD,
                        ACHETER, SEARCH,
@@ -91,6 +85,12 @@ int main()
             break;
         }
     }
+    echo();
+    char input[100];
+    mvwgetstr(menuWin,winH-2,2,input);
+    int my_int; 
+    sscanf(input,"%d",&my_int);
+
     int selectedIndex = mainMenu->curitem->index;
     unpost_menu(mainMenu);
     free_menu(mainMenu);                // deallocate menu memory
