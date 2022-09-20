@@ -29,12 +29,23 @@
 #define QUITTER "8.Quitter"              // min max avg total
 
 //ERRNOS
-
 #define WRONG_INPUT 0
+
+//prompts
+#define PROMPT_NPRODUCTS "enter le nombre des produit a ajouter : "
+
+#define PROMPT_PRODUCT_NAME "Entrer le Nom de produit : "
+
+#define PROMPT_PRODUCT_PRICE "Entrer le Prix de produit : "
+#define PROMPT_QTTY "Entrer la quantite de produit : "
+
 
 // errors messages
 #define ERR_WRONG_INPUT "Entree incorrect"
+#define ERR_NEGATIVE_PRICE "eurreur prix negative ! "
+#define ERR_NEGATIVE_QTTY "eurreur quantite negative ! "
 
 //info messages
+#define PRODUCT_ADDED "PRODUIT BIEN AJOUTEE"
 #define QUIT_MESSAGE "en cours de quiter..."
 #endif
