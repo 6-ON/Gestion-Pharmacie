@@ -117,6 +117,25 @@ void sortProductListByPrice(ProductList *pl, bool is_asc)
         }
     }
 }
+void sortProductListByCode(ProductList *pl, bool is_asc)
+{
+
+    for (int i = 0; i < pl->length - 1; i++)
+    {
+        for (int j = i + 1; j < pl->length; j++)
+        {
+            bool sortCondition = pl->elements[i].code > pl->elements[j].code;
+            if (sortCondition && is_asc) // check sort condition and asc or desc
+            {
+                swapProducts(pl->elements + i, pl->elements + j);
+            }
+            else if (!sortCondition && !is_asc)
+            {
+                swapProducts(pl->elements + i, pl->elements + j);
+            }
+        }
+    }
+}
 
 void sortProductListByName(ProductList *pl, bool is_asc)
 {

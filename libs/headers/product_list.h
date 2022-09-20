@@ -5,7 +5,6 @@
 
 #define NOT_FOUND -404
 
-extern unsigned int currentprodCode;
 
 typedef struct 
 {
@@ -28,6 +27,9 @@ void sortProductListByName(ProductList*,bool);
 
 //returns sorted ProductList by Price asc or desc
 void sortProductListByPrice(ProductList*,bool);
+
+//returns sorted ProductList by code asc or desc
+void sortProductListByCode(ProductList*,bool);
 
 
 void printProductList(ProductList);
