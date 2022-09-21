@@ -9,7 +9,6 @@
 
 #define PROMPT_MARK ">> "
 
-#define N_CHOICES 8
 //MAIN MENU CHOIICES
 #define CH_RTEOUR_MENU 0
 #define CH_AJOUTER 1
@@ -17,12 +16,18 @@
 #define CH_ACHETER 3
 #define CH_SEARCH 4
 #define CH_ESTOCK 5
-#define CH_SUPP_PROD 6
-#define CH_ST_VNT 7
-#define CH_QUITTER 8
+#define CH_AL_STOCK 6
+#define CH_SUPP_PROD 7
+#define CH_ST_VNT 8
+#define CH_QUITTER 9
+
 //MENU LIST PRODUCTS
 #define CH_ORDER_BY_NAME_ASC 1
 #define CH_ORDER_BY_PRICE_DESC 2
+
+//MENU LIST PRODUCTS
+#define CH_SRCH_CODE 1
+#define CH_SRCH_QTTY 2
 
 // main menu options STRS
 #define AJOUTER "1. Ajouter nouveau produits"
@@ -30,14 +35,19 @@
 #define ACHETER "3. Acheter produit"
 #define SEARCH "4. Rechercher les produits"  // par code et quantite
 #define ESTOCK "5. Afficher l'etat du stock" // low quantity
-#define SUPP_PROD "6. Supprimer Produit"
-#define ST_VNT "7. Statistique de vente" // min max avg total
-#define QUITTER "8.Quitter"
+#define ALSTOCK "6. ALimenter le stock" // low quantity
+#define SUPP_PROD "7. Supprimer Produit"
+#define ST_VNT "8. Statistique de vente" // min max avg total
+#define QUITTER "9.Quitter"
 #define RETOUR_MENU "<-- 0"
 
 //MENU LIST PRODUCTS
 #define NOM_ASC "1.Lister Par Nom Croissant"
 #define PRIX_DESC "2.Lister Par prix Decroissant"              
+
+//menu search Products
+#define SRCH_CD "1. Rechercher par code"
+#define SRCH_QTTY "2.Rechercher Par Quantite"              
 
 //ERRNOS
 #define WRONG_INPUT 0
