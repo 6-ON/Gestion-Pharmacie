@@ -1,6 +1,6 @@
 CC = gcc
-OBJS = menu.o product.o product_list.o  controller.o main.o
-SRCS = libs/sources/menu.c libs/sources/product.c libs/sources/product_list.c  libs/sources/controller.c main.c
+OBJS = menu.o product.o product_list.o  controller.o main.o purchase.o
+SRCS = libs/sources/menu.c libs/sources/product.c libs/sources/product_list.c  libs/sources/controller.c main.c libs/sources/purchase.c
 APP =  Gestion_Pharmacie
 all:LINK
 
