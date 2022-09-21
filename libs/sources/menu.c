@@ -4,10 +4,12 @@
 #include "../headers/menutils.h"
 #include "../headers/product_list.h"
 #include "../headers/product.h"
+#include "../headers/purchase.h"
 #include "../headers/controller.h"
 #include <stdbool.h>
 
 extern ProductList pl;
+extern PurchaseList purl;
 
 // input functions
 void getInt(int *val)
@@ -16,7 +18,7 @@ void getInt(int *val)
     {
         char buff[255];
         fgets(buff, sizeof(buff), stdin);
-        if (sscanf(buff, "%d", val) == WRONG_INPUT)
+        if (sscanf(buff, "%d", val) == 0)
         {
             puts(ERR_WRONG_INPUT);
             printf(PROMPT_MARK);
@@ -25,6 +27,7 @@ void getInt(int *val)
         break;
     }
 }
+
 void getDouble(double *val)
 {
     while (true)
@@ -45,7 +48,7 @@ void getDouble(double *val)
 void printMenu()
 {
     printf(
-        AJOUTER "\n" LISTER_PRD "\n" ACHETER "\n" SEARCH "\n" ESTOCK "\n" SUPP_PROD "\n" ST_VNT "\n" QUITTER "\n>> ");
+        AJOUTER "\n" LISTER_PRD "\n" ACHETER "\n" SEARCH "\n" ESTOCK "\n" ALSTOCK "\n" SUPP_PROD "\n" ST_VNT "\n" QUITTER "\n>> ");
 }
 
 // done
@@ -55,12 +58,19 @@ void showAddProductView()
     char init_name[255];
     int init_quantity;
     double init_price;
+renter_count:
     int count;
     printf(PROMPT_NPRODUCTS);
     getInt(&count);
+    if (count <= 0)
+    {
+        puts(ERR_WRONG_INPUT);
+        goto renter_count;
+    }
+
     for (int i = 0; i < count; i++)
     {
-        printf("%d\n", i);
+        printf("-----%d-----\n", i) + 1;
         printf(PROMPT_PRODUCT_NAME);
 
         fgets(init_name, sizeof(init_name), stdin);
@@ -85,7 +95,7 @@ void showAddProductView()
         addProduct(&pl, newProduct(init_name, init_price, (unsigned int)init_quantity));
     }
 
-    writeData(&pl);
+    writeData(&pl, &purl);
     puts(PRODUCT_ADDED);
 }
 // done
@@ -128,11 +138,12 @@ renter_choix:
         getInt(&input);
     } while (input != 0);
 }
-//done
+// done
 void showPurchaseView()
 {
     system(CLEAR);
     int code;
+renter_code:
     printf(PROMPT_PRODUCT_CODE);
     getInt(&code);
     int index = findProductByCode(pl, code);
@@ -140,6 +151,7 @@ void showPurchaseView()
     {
     case NOT_FOUND:
         puts(ERR_PRD_NOT_FOUND);
+        goto renter_code;
         break;
     default:
         printProduct(pl.elements[index]);
@@ -153,7 +165,15 @@ void showPurchaseView()
             printf(PROMPT_MARK);
             goto renter_qtty;
         }
+        else if (quantity == 0)
+        {
+            puts(ERR_WRONG_INPUT);
+            printf(PROMPT_MARK);
+            goto renter_qtty;
+        }
+
         int result = consumeQuanitity(pl.elements + index, quantity);
+
         switch (result)
         {
         case ERR_NO_ENOU_QTTY:
@@ -163,36 +183,135 @@ void showPurchaseView()
 
         case W_LOW_QTTY:
             puts(WA_LOW_QTTY);
-            writeData(&pl);
+            recordPurchase(&purl, newPurchase(pl.elements[index], quantity));
+            writeData(&pl, &purl);
             break;
         case SUCCESS:
             puts(PRODUCT_PRCD);
-            writeData(&pl);
+            recordPurchase(&purl, newPurchase(pl.elements[index], quantity));
+            writeData(&pl, &purl);
             break;
         }
         break;
     }
-    
 }
+//done
 void showSearchView()
 {
     system(CLEAR);
-    printf("V4");
+    puts(SRCH_CD "\n" SRCH_QTTY "\n" RETOUR_MENU);
+renter_choice:
+    printf(PROMPT_MARK);
+    int choice;
+    getInt(&choice);
+
+    switch (choice)
+    {
+    case CH_SRCH_CODE:
+        system(CLEAR);
+    renter_code:
+        printf(PROMPT_PRODUCT_CODE);
+        int code;
+        getInt(&code);
+        if (code < 0)
+        {
+            puts(ERR_WRONG_INPUT);
+            goto renter_code;
+        }
+
+        int index = findProductByCode(pl, code);
+        switch (index)
+        {
+        case NOT_FOUND:
+            puts(ERR_PRD_NOT_FOUND);
+            goto renter_code;
+
+        default:
+            system(CLEAR);
+            printProduct(pl.elements[index]);
+            puts(RETOUR_MENU);
+            int ch;
+
+            do
+            {
+                printf(PROMPT_MARK);
+                getInt(&ch);
+            } while (ch != 0);
+
+            break;
+        }
+        break;
+
+    case CH_SRCH_QTTY:
+        renter_qtty:
+        printf(PROMPT_QTTY);
+        int qtty;
+        getInt(&qtty);
+        if (qtty < 0)
+        {
+            puts(ERR_WRONG_INPUT);
+            goto renter_qtty;
+        }
+        system(CLEAR);
+        findProductsByQuantity(pl,qtty);
+        puts(RETOUR_MENU);
+        int ch;
+        do
+        {
+            printf(PROMPT_MARK);
+            getInt(&ch);
+        } while (ch !=0);
+        
+        break;
+    case CH_RTEOUR_MENU:
+        return;
+        break;
+    default:
+        puts(ERR_OUT_OF_RANGE);
+        goto renter_choice;
+        break;
+    }
 }
+//almost done
 void showStockStateView()
 {
     system(CLEAR);
-    printf("V5");
+    puts("-----ETAT DE STOCK----");
+    
+    printLowQuantityProducts(pl);
+    puts(RETOUR_MENU);
+    int ch;
+    do
+    {
+        printf(PROMPT_MARK);
+        getInt(&ch);
+    } while (ch!=0);
+    
 }
+
+void showAddToStockView()
+{
+    system(CLEAR);
+    
+}
+
 void showDeleteProductView()
 {
     system(CLEAR);
     printf("V6");
 }
+
 void showStatisticsView()
 {
     system(CLEAR);
-    printf("V7");
+    printTodayBrief(purl);
+    puts(RETOUR_MENU);
+    int ch;
+    do
+    {
+        printf(PROMPT_MARK);
+        getInt(&ch);
+    } while (ch != 0);
 }
 
 void Menu()
@@ -219,6 +338,9 @@ renter_choix:
         break;
     case CH_ESTOCK:
         showStockStateView();
+        break;
+    case CH_AL_STOCK:
+        showAddToStockView();
         break;
     case CH_SUPP_PROD:
         showDeleteProductView();
