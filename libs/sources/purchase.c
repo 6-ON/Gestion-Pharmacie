@@ -7,6 +7,7 @@ Purchase newPurchase(Product prd)
     struct tm curr_time_info = *localtime(&curr_time);
     Purchase pur = {pr_time : curr_time_info, price : prd.priceTTC, codePrd : prd.code};
     return pur;
+    //should i free the adress of curr_time_info  ?
 }
 
 void printPurchase(Purchase pur)
@@ -29,10 +30,19 @@ void printTodayBrief(PurchaseList purl)
 {
     time_t curr_time =time(NULL);
     struct tm curr_time_info = *localtime(&curr_time);
+
     for (int i = 0; i < purl.length; i++)
     {
-        
         Purchase p = purl.elements[i];
-        printPurchase(p.pr_time.);
+        if (curr_time_info.tm_year == p.pr_time.tm_year)
+        {
+            if (curr_time_info.tm_yday == p.pr_time.tm_yday)
+            {
+                printPurchase(p);
+            }
+            
+        }
+        
     }
+    //should i free the adress of curr_time_info  ?
 }

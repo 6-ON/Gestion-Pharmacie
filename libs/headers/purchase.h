@@ -18,7 +18,7 @@ typedef struct
 } PurchaseList;
 
 // create new purchase
-Purchase newPurchase(Produit);
+Purchase newPurchase(Product);
 
 // create new purchase List
 PurchaseList newPurchaselist();
