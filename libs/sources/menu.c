@@ -70,7 +70,7 @@ renter_count:
 
     for (int i = 0; i < count; i++)
     {
-        printf("-----%d-----\n", i) + 1;
+        printf("-----%d-----\n", i + 1);
         printf(PROMPT_PRODUCT_NAME);
 
         fgets(init_name, sizeof(init_name), stdin);
@@ -111,14 +111,14 @@ renter_choix:
     case CH_ORDER_BY_NAME_ASC:
         sortProductListByName(&pl, true);
         system(CLEAR);
-        printProductList(pl);
+        printShortenProductList(pl);
         puts(RETOUR_MENU);
 
         break;
     case CH_ORDER_BY_PRICE_DESC:
-        sortProductListByName(&pl, true);
+        sortProductListByPrice(&pl, false);
         system(CLEAR);
-        printProductList(pl);
+        printShortenProductList(pl);
         puts(RETOUR_MENU);
         break;
     case CH_RTEOUR_MENU:
@@ -195,7 +195,7 @@ renter_code:
         break;
     }
 }
-//done
+// done
 void showSearchView()
 {
     system(CLEAR);
@@ -243,7 +243,7 @@ renter_choice:
         break;
 
     case CH_SRCH_QTTY:
-        renter_qtty:
+    renter_qtty:
         printf(PROMPT_QTTY);
         int qtty;
         getInt(&qtty);
@@ -253,15 +253,15 @@ renter_choice:
             goto renter_qtty;
         }
         system(CLEAR);
-        findProductsByQuantity(pl,qtty);
+        findProductsByQuantity(pl, qtty);
         puts(RETOUR_MENU);
         int ch;
         do
         {
             printf(PROMPT_MARK);
             getInt(&ch);
-        } while (ch !=0);
-        
+        } while (ch != 0);
+
         break;
     case CH_RTEOUR_MENU:
         return;
@@ -272,12 +272,12 @@ renter_choice:
         break;
     }
 }
-//almost done
+// almost done
 void showStockStateView()
 {
     system(CLEAR);
     puts("-----ETAT DE STOCK----");
-    
+
     printLowQuantityProducts(pl);
     puts(RETOUR_MENU);
     int ch;
@@ -285,25 +285,41 @@ void showStockStateView()
     {
         printf(PROMPT_MARK);
         getInt(&ch);
-    } while (ch!=0);
-    
+    } while (ch != 0);
 }
 
 void showAddToStockView()
 {
     system(CLEAR);
-    
 }
-
+//DONE
 void showDeleteProductView()
 {
     system(CLEAR);
-    printf("V6");
+renter_code:
+    printf(PROMPT_PRODUCT_CODE);
+    int code;
+    getInt(&code);
+    int result = removeProductByCode(&pl,code);
+    switch (result)
+    {
+    case SUCCESS:
+        puts(PRODUCT_DEL);
+        writeData(&pl,&purl);
+        break;
+    case NOT_FOUND:
+        puts(ERR_PRD_NOT_FOUND);
+        goto renter_code;
+        break;
+    default:
+        break;
+    }
 }
-
+// done
 void showStatisticsView()
 {
     system(CLEAR);
+    puts("----STATISITIQUES DE VENTES----");
     printTodayBrief(purl);
     puts(RETOUR_MENU);
     int ch;
