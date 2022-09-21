@@ -22,7 +22,7 @@ int findProductByCode(ProductList,unsigned int);
 
 // print Product with the same quantity
 void findProductsByQuantity(ProductList,unsigned int);
-
+// return SUCCESS if product removed otherwise returns NOT_FOUND 
 int removeProductByCode(ProductList*,int);
 
 //returns sorted ProductList by Name asc or desc
@@ -34,9 +34,9 @@ void sortProductListByPrice(ProductList*,bool);
 //returns sorted ProductList by code asc or desc
 void sortProductListByCode(ProductList*,bool);
 
-
+//prints product list
 void printProductList(ProductList);
-
+// print product list name,price price ttc
 void printShortenProductList(ProductList pl);
 
 void printLowQuantityProducts(ProductList pl);
