@@ -75,5 +75,6 @@
 //info messages
 #define PRODUCT_ADDED "PRODUIT BIEN AJOUTEE"
 #define PRODUCT_PRCD "PRODUIT BIEN ACHETER"
+#define PRODUCT_DEL "PRODUIT BIEN SUPPRIMEE"
 #define QUIT_MESSAGE "en cours de quiter..."
 #endif
