@@ -25,10 +25,10 @@ void printProductList(ProductList pl)
 
 void printShortenProductList(ProductList pl)
 {
-    for (int i = 0; i < 85; i++)
+    for (int i = 0; i < 50; i++)
         putchar('_');
-    printf("\n||\tNOM\t|\tPRIX\t|\tPRIX TTC\t||\n");
-    for (int i = 0; i < 85; i++)
+    printf("\n||\tNOM\t|\tPRIX\t| PRIX TTC \t||\n");
+    for (int i = 0; i < 50; i++)
         putchar('-');
     putchar('\n');
     for (int i = 0; i < pl.length; i++)
