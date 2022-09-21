@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TTC 15
+#define TTC 0.15
 
 extern unsigned int currentprodCode;
 // private functions declarations
@@ -20,8 +20,7 @@ Product newProduct(char *_name, double _price, unsigned int _inital_quantity)
 }
 Product initProduct(unsigned int _code ,char *_name, double _price, unsigned int _inital_quantity)
 {
-    int _priceTTC = getPriceTTC(_price);
-    Product p = {code : _code, name : NULL, price : _price, priceTTC : _priceTTC, quantity : _inital_quantity};
+    Product p = {code : _code, name : NULL, price : _price, priceTTC : getPriceTTC(_price), quantity : _inital_quantity};
     p.name = calloc(strlen(_name) + 1, sizeof(char)); // alocate memory for the name
     strcpy(p.name, _name);                            // copy it
     return p;
@@ -122,4 +121,4 @@ int consumeQuanitity(Product *p, unsigned int _quantity)
 
 
 
-double getPriceTTC(double _price) { return _price + (double)TTC * _price / (double)100; }
+double getPriceTTC(double _price) { return _price + _price*TTC; }
