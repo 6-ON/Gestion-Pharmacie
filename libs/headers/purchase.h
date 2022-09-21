@@ -33,7 +33,7 @@ void printPurchase(Purchase);
 // add purchase to the record list
 void recordPurchase(PurchaseList *, Purchase);
 
-// print max mix avg of today
+// print t max mix avg of today
 void printTodayBrief(PurchaseList);
 
 // save records in a log file
