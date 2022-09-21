@@ -8,7 +8,7 @@ typedef struct
 {
     struct tm pr_time;
     double price;
-    unsigned codePrd;
+    unsigned int codePrd;
 } Purchase;
 
 typedef struct
@@ -18,7 +18,10 @@ typedef struct
 } PurchaseList;
 
 // create new purchase
-Purchase newPurchase(Product);
+Purchase newPurchase(Product,unsigned int);
+
+//init Purchase with custom time
+Purchase initPurchase(unsigned int,double,unsigned int ,unsigned int,unsigned int,unsigned int);
 
 // create new purchase List
 PurchaseList newPurchaselist();

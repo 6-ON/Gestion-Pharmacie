@@ -1,18 +1,29 @@
 #include "../headers/purchase.h"
 #include <stdio.h>
 #include <stdlib.h>
-Purchase newPurchase(Product prd)
+
+Purchase newPurchase(Product prd, unsigned int qtty)
 {
     time_t curr_time = time(NULL);
     struct tm curr_time_info = *localtime(&curr_time);
-    Purchase pur = {pr_time : curr_time_info, price : prd.priceTTC, codePrd : prd.code};
+    Purchase pur = {pr_time : curr_time_info, price : prd.priceTTC * (double)qtty, codePrd : prd.code};
     return pur;
-    //should i free the adress of curr_time_info  ?
+    // should i free the adress of curr_time_info  ?
+}
+Purchase initPurchase(unsigned int _code, double _price, unsigned int _phour, unsigned int _pmday, unsigned int _pmo, unsigned int _pyear)
+{
+    struct tm curr_time_info = {.tm_hour = _phour, .tm_mday = _pmday, .tm_mon = _pmo, .tm_year = _pyear};
+    Purchase pur = {pr_time : curr_time_info, price : _price, codePrd : _code};
+    return pur;
 }
 
 void printPurchase(Purchase pur)
 {
-    printf("%d %lf %s \n", asctime(&pur.pr_time));
+    // fix asctime not working as epected
+    time_t purchase_time_t = mktime(&pur.pr_time);
+    struct tm purchase_tm = *localtime(&purchase_time_t);
+
+    printf("code : %d | prixTTC: %.2lf | Date: %s", pur.codePrd, pur.price, asctime(&purchase_tm));
 }
 
 PurchaseList newPurchaselist()
@@ -24,11 +35,12 @@ PurchaseList newPurchaselist()
 void recordPurchase(PurchaseList *purl, Purchase p)
 {
     purl->elements = (purl->elements == NULL) ? calloc(++purl->length, sizeof(Purchase)) : realloc(purl->elements, ++purl->length * sizeof(Purchase));
-    purl->elements[purl->length] = p;
+    purl->elements[purl->length - 1] = p;
 }
+
 void printTodayBrief(PurchaseList purl)
 {
-    time_t curr_time =time(NULL);
+    time_t curr_time = time(NULL);
     struct tm curr_time_info = *localtime(&curr_time);
 
     for (int i = 0; i < purl.length; i++)
@@ -36,13 +48,14 @@ void printTodayBrief(PurchaseList purl)
         Purchase p = purl.elements[i];
         if (curr_time_info.tm_year == p.pr_time.tm_year)
         {
-            if (curr_time_info.tm_yday == p.pr_time.tm_yday)
+            if (curr_time_info.tm_mon == p.pr_time.tm_mon)
             {
-                printPurchase(p);
+                if (curr_time_info.tm_mday == p.pr_time.tm_mday)
+                {
+                    printPurchase(p);
+                }
             }
-            
         }
-        
     }
-    //should i free the adress of curr_time_info  ?
+    // should i free the adress of curr_time_info  ?
 }
