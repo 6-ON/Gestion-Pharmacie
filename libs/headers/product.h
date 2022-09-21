@@ -54,7 +54,7 @@ void addQuantity(Product*,unsigned int);
 // consume quantity 
 // retuns SUCCESS if the quantity is consumed and left more than 3
 // retuns W_LOW_QTTY if the quantity is consumed and left less than 3
-// retuns W_LOW_QTTY if the quantity is consumed and left less than 3
+// retuns ERR_NO_ENOU_QTTY if the quantity to consume bigger than the available
 int consumeQuanitity(Product*,unsigned int);
 
 #endif 
