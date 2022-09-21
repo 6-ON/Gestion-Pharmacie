@@ -7,7 +7,7 @@
 #define W_LOW_QTTY 300 
 #define ERR_NO_ENOU_QTTY 401 
 
-extern unsigned int currentprodCode;
+
 
 typedef struct 
 {

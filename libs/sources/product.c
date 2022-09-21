@@ -5,7 +5,7 @@
 
 #define TTC 15
 
-unsigned int currentprodCode;
+extern unsigned int currentprodCode;
 // private functions declarations
 
 // returns priceTTC
@@ -31,7 +31,7 @@ void printProduct(Product p)
 {
     printf("---PRODUIT---\n"
            "Code %d\n"
-           "LABEL %s\n"
+           "NOM %s\n"
            "Prix %.2lf\n"
            "Prix TTC: %.2lf\n"
            "Quantité: %d\n",
