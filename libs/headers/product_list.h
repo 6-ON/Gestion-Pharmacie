@@ -18,7 +18,10 @@ void addProduct(ProductList*,Product);
 
 // returns product index in the product list if found
 // otherwise returns NOT_FOUND 
-int findProductByCode(ProductList,int);
+int findProductByCode(ProductList,unsigned int);
+
+// print Product with the same quantity
+void findProductsByQuantity(ProductList,unsigned int);
 
 int removeProductByCode(ProductList*,int);
 

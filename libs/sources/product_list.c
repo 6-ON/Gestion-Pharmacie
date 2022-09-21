@@ -37,7 +37,8 @@ void printShortenProductList(ProductList pl)
     }
 }
 
-void printLowQuantityProducts(ProductList pl){
+void printLowQuantityProducts(ProductList pl)
+{
     for (int i = 0; i < pl.length; i++)
     {
         Product _current = pl.elements[i];
@@ -45,9 +46,7 @@ void printLowQuantityProducts(ProductList pl){
         {
             printProductTable(_current);
         }
-        
     }
-    
 }
 
 void addProduct(ProductList *pl, Product prod)
@@ -57,10 +56,10 @@ void addProduct(ProductList *pl, Product prod)
     else
         pl->elements = realloc(pl->elements, ++pl->length * sizeof(Product));
 
-    pl->elements[pl->length - 1]=prod;
+    pl->elements[pl->length - 1] = prod;
 }
 
-int findProductByCode(ProductList pl, int _code)
+int findProductByCode(ProductList pl, unsigned int _code)
 {
     for (int i = 0; i < pl.length; i++)
     {
@@ -68,6 +67,24 @@ int findProductByCode(ProductList pl, int _code)
             return i;
     }
     return NOT_FOUND;
+}
+
+void findProductsByQuantity(ProductList pl, unsigned int qtty)
+{
+    int count = 0;
+    for (int i = 0; i < pl.length; i++)
+    {
+        Product p = pl.elements[i];
+        if (p.quantity == qtty)
+        {
+            printProductTable(p);
+            count++;
+        }
+    }
+    if (count == 0)
+    {
+       printf("%d Produit trouvée\n",count);
+    }
 }
 
 void removeProductAt(ProductList *pl, int _index)
@@ -144,7 +161,7 @@ void sortProductListByName(ProductList *pl, bool is_asc)
     {
         for (int j = i + 1; j < pl->length; j++)
         {
-            bool sortCondition = strcasecmp(pl->elements[i].name , pl->elements[j].name) > 0;
+            bool sortCondition = strcasecmp(pl->elements[i].name, pl->elements[j].name) > 0;
             if (sortCondition && is_asc) // check sort condition and asc or desc
             {
                 swapProducts(pl->elements + i, pl->elements + j);
@@ -156,7 +173,3 @@ void sortProductListByName(ProductList *pl, bool is_asc)
         }
     }
 }
-
-
-
-
