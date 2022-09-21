@@ -42,7 +42,8 @@ void printTodayBrief(PurchaseList purl)
 {
     time_t curr_time = time(NULL);
     struct tm curr_time_info = *localtime(&curr_time);
-
+    double sum = 0, min, max, count = 0;
+    bool first_match = true;
     for (int i = 0; i < purl.length; i++)
     {
         Purchase p = purl.elements[i];
@@ -52,10 +53,24 @@ void printTodayBrief(PurchaseList purl)
             {
                 if (curr_time_info.tm_mday == p.pr_time.tm_mday)
                 {
+                    if (first_match)
+                    {
+                        min = p.price;
+                        max = p.price;
+                    }
+                    else
+                    {
+                        min = (min > p.price) ? p.price : min;
+                        max = (max < p.price) ? p.price : max;
+                    }
+
                     printPurchase(p);
+                    count++;
+                    sum += p.price;
                 }
             }
         }
     }
-    // should i free the adress of curr_time_info  ?
+    printf("\nSOM : %.2lf | MAX : %.2lf | MIN : %.2lf | MOY : %.2lf\n",
+           sum, max, min, sum / count);
 }
