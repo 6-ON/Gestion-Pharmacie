@@ -19,7 +19,7 @@ void getInt(int *val)
         if (sscanf(buff, "%d", val) == WRONG_INPUT)
         {
             puts(ERR_WRONG_INPUT);
-            printf("|>> ");
+            printf(PROMPT_MARK);
             continue;
         }
         break;
@@ -34,12 +34,13 @@ void getDouble(double *val)
         if (sscanf(buff, "%lf", val) == WRONG_INPUT)
         {
             puts(ERR_WRONG_INPUT);
-            printf(">> ");
+            printf(PROMPT_MARK);
             continue;
         }
         break;
     }
 }
+
 // Prints Menu
 void printMenu()
 {
@@ -59,7 +60,7 @@ void showAddProductView()
     getInt(&count);
     for (int i = 0; i < count; i++)
     {
-        printf("%d\n",i);
+        printf("%d\n", i);
         printf(PROMPT_PRODUCT_NAME);
 
         fgets(init_name, sizeof(init_name), stdin);
@@ -87,21 +88,91 @@ void showAddProductView()
     writeData(&pl);
     puts(PRODUCT_ADDED);
 }
+// done
 void showListProductsView()
 {
     system(CLEAR);
-    printProductList(pl);
-    puts("<--0");
-    puts(">>");
+    printf(NOM_ASC "\n" PRIX_DESC "\n" RETOUR_MENU "\n" PROMPT_MARK);
+    int choice;
+renter_choix:
+    getInt(&choice);
+    switch (choice)
+    {
+    case CH_ORDER_BY_NAME_ASC:
+        sortProductListByName(&pl, true);
+        system(CLEAR);
+        printProductList(pl);
+        puts(RETOUR_MENU);
+
+        break;
+    case CH_ORDER_BY_PRICE_DESC:
+        sortProductListByName(&pl, true);
+        system(CLEAR);
+        printProductList(pl);
+        puts(RETOUR_MENU);
+        break;
+    case CH_RTEOUR_MENU:
+        return;
+        break;
+
+    default:
+        puts(ERR_OUT_OF_RANGE);
+        printf(PROMPT_MARK);
+        goto renter_choix;
+        break;
+    }
+    printf(PROMPT_MARK);
     int input;
     do
     {
         getInt(&input);
     } while (input != 0);
 }
+//done
 void showPurchaseView()
 {
     system(CLEAR);
+    int code;
+    printf(PROMPT_PRODUCT_CODE);
+    getInt(&code);
+    int index = findProductByCode(pl, code);
+    switch (index)
+    {
+    case NOT_FOUND:
+        puts(ERR_PRD_NOT_FOUND);
+        break;
+    default:
+        printProduct(pl.elements[index]);
+        int quantity;
+    renter_qtty:
+        printf(PROMPT_QTTY_CNSM);
+        getInt(&quantity);
+        if (quantity < 0)
+        {
+            puts(ERR_NEGATIVE_QTTY);
+            printf(PROMPT_MARK);
+            goto renter_qtty;
+        }
+        int result = consumeQuanitity(pl.elements + index, quantity);
+        switch (result)
+        {
+        case ERR_NO_ENOU_QTTY:
+            puts(ERR_STOCK);
+            goto renter_qtty;
+            break;
+
+        case W_LOW_QTTY:
+            puts(WA_LOW_QTTY);
+            writeData(&pl);
+            break;
+        case SUCCESS:
+            puts(PRODUCT_PRCD);
+            writeData(&pl);
+            break;
+        }
+        break;
+    }
+    
 }
 void showSearchView()
 {
@@ -128,7 +199,9 @@ void Menu()
 {
     system(CLEAR);
     printMenu();
+
     int choice;
+renter_choix:
     getInt(&choice);
     switch (choice)
     {
@@ -159,7 +232,9 @@ void Menu()
         break;
 
     default:
-        puts(ERR_WRONG_INPUT);
+        puts(ERR_OUT_OF_RANGE);
+        printf(PROMPT_MARK);
+        goto renter_choix;
         break;
     }
     puts("retour a menu ...");
