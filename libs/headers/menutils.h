@@ -61,6 +61,7 @@
 #define PROMPT_PRODUCT_PRICE "Entrer le Prix de produit : "
 #define PROMPT_QTTY "Entrer la quantite de produit : "
 #define PROMPT_QTTY_CNSM "Entrer la quantite a acheter : "
+#define PROMPT_QTTY_ADD "Entrer la quantite a ajouter : "
 
 
 // errors messages
@@ -76,5 +77,6 @@
 #define PRODUCT_ADDED "PRODUIT BIEN AJOUTEE"
 #define PRODUCT_PRCD "PRODUIT BIEN ACHETER"
 #define PRODUCT_DEL "PRODUIT BIEN SUPPRIMEE"
+#define QUANTITY_ADDED "QUANTITE BIEN AJOUTEE"
 #define QUIT_MESSAGE "en cours de quiter..."
 #endif
