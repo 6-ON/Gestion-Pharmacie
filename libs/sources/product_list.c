@@ -83,7 +83,7 @@ void findProductsByQuantity(ProductList pl, unsigned int qtty)
     }
     if (count == 0)
     {
-       printf("%d Produit trouvée\n",count);
+        printf("%d Produit trouvée\n", count);
     }
 }
 
@@ -172,4 +172,15 @@ void sortProductListByName(ProductList *pl, bool is_asc)
             }
         }
     }
+}
+
+unsigned int getCurrentCode(ProductList pl)
+{
+    unsigned int max = pl.elements[0].code;
+    for (int i = 1; i < pl.length; i++)
+    {
+        unsigned int curr = pl.elements[i].code;
+        max = (max < curr) ? curr : max;
+    }
+    return max + 1;
 }

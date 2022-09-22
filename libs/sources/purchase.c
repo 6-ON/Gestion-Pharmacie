@@ -57,6 +57,7 @@ void printTodayBrief(PurchaseList purl)
                     {
                         min = p.price;
                         max = p.price;
+                        first_match =false;
                     }
                     else
                     {

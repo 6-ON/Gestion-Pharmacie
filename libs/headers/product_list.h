@@ -37,8 +37,9 @@ void sortProductListByCode(ProductList*,bool);
 //prints product list
 void printProductList(ProductList);
 // print product list name,price price ttc
-void printShortenProductList(ProductList pl);
+void printShortenProductList(ProductList);
 
-void printLowQuantityProducts(ProductList pl);
+void printLowQuantityProducts(ProductList);
 
+unsigned int getCurrentCode(ProductList);
 #endif

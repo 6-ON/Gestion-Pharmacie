@@ -60,7 +60,7 @@ PurchaseList getRecordsData()
 
 void writeData(ProductList *pL, PurchaseList *purL)
 {
-    sortProductListByCode(pL, true); // resort by code to insure that the currentprodCode work as expected
+    // sortProductListByCode(pL, true); // resort by code to insure that the currentprodCode work as expected
     
     // write products
     FILE *prodData = openData("produits.txt", "w");

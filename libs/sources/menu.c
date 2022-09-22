@@ -225,7 +225,7 @@ renter_choice:
         case NOT_FOUND:
             puts(ERR_PRD_NOT_FOUND);
             goto renter_code;
-
+            
         default:
             system(CLEAR);
             printProduct(pl.elements[index]);
@@ -291,6 +291,34 @@ void showStockStateView()
 void showAddToStockView()
 {
     system(CLEAR);
+    renter_code:
+    printf(PROMPT_PRODUCT_CODE);
+    int code;
+    getInt(&code);
+    int index = findProductByCode(pl,code);
+    switch (index)
+    {
+    case NOT_FOUND:
+        puts(ERR_PRD_NOT_FOUND);
+        goto renter_code;
+        break;
+    
+    default:
+    printProduct(pl.elements[index]);
+    renter_qtty:
+        printf(PROMPT_QTTY_ADD);
+        int qtty;
+        getInt(&qtty);
+        if (qtty<0)
+        {
+            puts(ERR_NEGATIVE_QTTY);
+            goto renter_qtty;
+        }
+        addQuantity(pl.elements+index,qtty);
+        puts(QUANTITY_ADDED);
+        writeData(&pl,&purl);
+        break;
+    }
 }
 //DONE
 void showDeleteProductView()
